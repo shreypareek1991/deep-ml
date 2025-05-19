@@ -24,24 +24,18 @@ Output:
 import numpy as np
 
 def matrix_image(A):
-	matrix = A.copy()
-	for i, row in enumerate(matrix):
-		for j, elem in enumerate(row):
-			if elem == 0:
-				continue
-			matrix[i,:] = row/elem
-			for k, _ in enumerate(matrix):
-				if i != k:
-					matrix[k,:] -= matrix[k,j] * matrix[i,:]         
-			break
+    matrix = A.copy()
+    for i, row in enumerate(matrix):
+        for j, elem in enumerate(row):
+            if elem != 0:
+                matrix[i,:] = row/elem
+                for k, _ in enumerate(matrix):
+                    if i != k:
+                        matrix[k,:] -= matrix[k,j] * matrix[i,:]         
+                break
 
-	non_zero_matrix = np.array([r for r in matrix if not np.all(r==0)])
-	pivot_cols = []
-	for non_zero_row in non_zero_matrix:
-		for j, elem in enumerate(non_zero_row):
-			if elem != 0:
-				pivot_cols.append(j)
-				break
+    non_zero_matrix = np.array([r for r in matrix if not np.all(r==0)])
+    pivot_cols = [np.nonzero(non_zero_row)[0][0] for non_zero_row in non_zero_matrix]
 		
-	return (A[:,pivot_cols])
+    return (A[:,pivot_cols])
 
